@@ -1,0 +1,6 @@
+criar um script para redirecionamento de todas as paginas para uma outra pagina avisando que o site esta
+em manutenção assim  nao permitindo que que nenhuma pagina seja acessada enquando estiver em manutenção
+e se for o caso ate mesmo redirecionar para um site novo caso necessario
+
+criar uma logica em php que redireciona para outra pagina igual a de usuarios nao logados 
+mas nessa caso ele vai ficar em todas as paginas criadas

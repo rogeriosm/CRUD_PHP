@@ -1,0 +1,44 @@
+/*ocultando a tag input file para dar um nome customizado*/
+.inputtypefile{
+    display: none;
+}
+.btnFile {
+    padding: 10px;
+    line-height: 50px;
+    text-align: center;
+    background-color: gray;
+    margin: 2px;
+}
+
+
+
+.input{
+    border-radius: 5px;
+}
+
+.erroMsg{
+    background-color: red;
+    color: aliceblue;
+}
+
+.sucMsg{
+    background-color: blue;
+    color: aliceblue;
+}
+/*estilo da tag img foto perfil*/
+.imgPerfil{
+    height: 155px;
+    width: 125px;
+    display: block;
+    background-color: aquamarine;
+    border-radius: 5px;
+}
+
+/*estilo da tag div foto perfil*/
+.fotoPerfil{
+
+}
+
+body{
+    background-color: gray;
+}
