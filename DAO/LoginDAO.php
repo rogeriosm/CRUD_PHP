@@ -15,7 +15,7 @@ class LoginDAO
     }
 
     //busca um usuario no banco de dados
-    function buscaUsuario(PessoaDTO $pessoaDTO)
+    function buscaUsuarioLogado(PessoaDTO $pessoaDTO)
     {
         try {
             //busca um usuario para comprar a senha
@@ -23,8 +23,8 @@ class LoginDAO
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(1, $pessoaDTO->getLogin());
             $stmt->execute();
-            $senha = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $senha;
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $usuario;
 
         } catch (PDOException $exc) {
             echo $exc->getMessage();

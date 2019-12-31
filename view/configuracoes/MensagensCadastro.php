@@ -43,7 +43,7 @@ if (!empty($_GET["erroUrl"]))
     //echo "<div id='errorlogin' class='erroMsg'> Essas pagina não pode ser acessada!</div>";
 }
 //retorna um erro por nao conseguir criar uma pasta, pode ser compatibilidade com sistemas do servidor
-if (!empty($_GET["errCriaPasta"]))
+if (!empty($_GET["errForm"]))
 {
     echo "<div id='errorlogin' class='erroMsg'>Não foi possivel criar a pasta de midia do usuario</div>";
 }
@@ -52,11 +52,24 @@ if(!empty($_GET["errUplImg"]))
 {
     echo "<div id='errorlogin' class='erroMsg'>Erro no upload de media<br>entre em contato com o administrador do site!</div>";
 }
+//retorna um erro por nao conseguir fazer o upload da imagem ou tentar fazer upload sem imagem
+if(!empty($_GET["errFormAcess"]))
+{
+    echo "<div id='errorlogin' class='erroMsg'>Não foi possível cadastrar esse usuário!<br>Informe o administrador!</div>";
+}
+//retorna um erro por nao conseguir fazer o upload da imagem ou tentar fazer upload sem imagem
+if(!empty($_GET["errFormLog"]))
+{
+    echo "<div id='errorlogin' class='erroMsg'>Não foi possível cadastrar esse usuário!<br>Login obrigatorio!</div>";
+}
+
+
+
 
 //mostrando todas as mensagens que estao dentro do array
-foreach ($arrayMsg as $msg)
-{
-    echo $msg;
-}
+//foreach ($arrayMsg as $msg)
+//{
+//    echo $msg;
+//}
 
 ?>
