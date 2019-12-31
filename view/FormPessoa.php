@@ -2,17 +2,15 @@
 <!--se for url ele redireciona para index-->
 <?php
 session_start();
-    if(empty($_SESSION['login']) && $_GET['form'] > 1 || $_GET['form'] < 1){
-        //form com valores maiores que 1 so podem ser acessados com usuario logado
-        //valores negativos caem no defalt da pagina salvar pessoas
-        header("location: /crud_php/index.php?erroUrl=1");
-    }
-    //so permite entrada atraves da pagina index com o codigo 1
-    if (empty($_GET['form'])){
-        header("location: /crud_php/index.php?erroUrl=1");
-        exit();
-    }
+//so permite o cadastro de usuarios nao logados com o codigo 1
+if (empty($_GET['form']) || empty($_SESSION['login']) && $_GET['form'] != 1) {
+    //form com valores maiores que 1 so podem ser acessados com usuario logado
+    //valores negativos caem no defalt da pagina salvar pessoas
+    header("location: /crud_php/index.php?erroUrl=1");
+    exit("Erro FormPessoa");
+}
 ?>
+
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -51,7 +49,17 @@ arrumar formularoip com os campos que estao faltando!
         Curso<br>
         <input type="text" name="curso" id="curso" class="input"><br>
 
-        <input type="hidden" name="form" id="form" value="<?= $_GET['form']; ?>">
+        <?php
+        //opção de cadastrar um usuario ou administrador so aparece quando
+        //tiver um usuario logado, por ser so demonstração o cadastro de adm sera
+        //liberado para qualquer usuario logado
+        if (!empty($_SESSION['login'])) {
+            echo "
+            <label for='form' > Tipo de usuario </label ><br >
+            <input type = 'text' class='input' name = 'tipoUsuario' id = 'tipoUsuario' value='1'><br >";
+        }
+        ?>
+        <input type="hidden" class="input" name="form" id="form" value="<?= $_GET['form']; ?>"><br>
         <input type="submit" class="btn" value="Enviar">
     </form>
 </div>
@@ -73,7 +81,6 @@ colocar as listas com paginação para não ficar uma pagina gigante
 quando logado mostrar uma pagina com botoes que levam o usuario para mostrar suas informaçoes(varias listas com
 informaçoes especifiacas e totais ) e informaçoes salva no bando de dados
 podendo alterar ou adicionar novas so dele mesmo mas mostra de todos os cadastrados
-
 
 
 paginas de login nao podem ser acessadas por pessoas so com url

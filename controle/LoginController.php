@@ -14,10 +14,12 @@ $loginDTO->setSenha($senha);
 
 $usuario = new LoginDAO();
 
-$usuarioSenha = $usuario->buscaUsuario($loginDTO);
+$usuariologado = $usuario->buscaUsuarioLogado($loginDTO);
 
-if(password_verify($senha, $usuarioSenha['senha'])){
-    $_SESSION['login'] = $usuarioSenha['login'];
+if(password_verify($senha, $usuariologado['senha'])){
+
+    $_SESSION['login'] = $usuariologado['login'];
+    $_SESSION['tipo'] = $usuariologado['tipo_usuario_id_tipo_usuario'];
     header('location: /crud_php/view/paginasRestritas/Home.php?msglog=1');
 }else{
     header('location: /crud_php/view/login.php?msgErrlog=1');
