@@ -16,10 +16,6 @@ class PessoaDAO
     //cadastra uma pessoa
     public function salvarPessoa(PessoaDTO $pessoaDTO)
     {
-//        echo '<pre>';
-//        print_r($pessoaDTO);
-//        echo '</pre>';die();
-
         try
         {
             //CALL `bd_cadastropessoa`.`cadastra_pessoa`('nome', 'apelido', 'login', 'senha', 'cpf', 'rg', 'numero de telefone', tipo de usuario,
@@ -71,11 +67,18 @@ class PessoaDAO
         }
     }
     //lista todas pessoas
-    public function listarTodasPessoa()
+    public function listarTodasPessoas()
     {
         try
         {
-            $sql = "select * from pessoa";
+            $sql = "select pe.id_pessoa, tu.descricao, pe.nome, pe.apelido, pe.login, dc.rg, dc.cpf, tel.numero, en.residencial, ema.email, cs.disciplina  from pessoa pe
+                    inner join tipo_usuario tu 	on pe.tipo_usuario_id_tipo_usuario 	= tu.id_tipo_usuario
+                    left join documento dc 		on pe.id_pessoa 					= dc.pessoa_id_pessoa
+                    left join telefone tel 		on pe.id_pessoa 					= tel.pessoa_id_pessoa
+                    left join endereco en 		on pe.id_pessoa 					= en.pessoa_id_pessoa
+                    left join email ema 		on ema.endereco_id_endereco			= en.id_endereco
+                    left join curso_pessoa cp 	on pe.id_pessoa 					= cp.pessoa_id_pessoa
+                    left join curso cs 			on cs.id_curso 						= cp.curso_id_curso";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
@@ -87,6 +90,34 @@ class PessoaDAO
             echo $exc->getMessage();
         }
     }
+    //lista todas pessoas com limit
+    public function listarPessoasLimit($paginaAtual, $itensPorPagina)
+    {
+        try
+        {
+            $sql = "select pe.id_pessoa, tu.descricao, pe.nome, pe.apelido, pe.login, dc.rg, dc.cpf, tel.numero, en.residencial, ema.email, cs.disciplina  from pessoa pe
+                    inner join tipo_usuario tu 	on pe.tipo_usuario_id_tipo_usuario 	= tu.id_tipo_usuario
+                    left join documento dc 		on pe.id_pessoa 					= dc.pessoa_id_pessoa
+                    left join telefone tel 		on pe.id_pessoa 					= tel.pessoa_id_pessoa
+                    left join endereco en 		on pe.id_pessoa 					= en.pessoa_id_pessoa
+                    left join email ema 		on ema.endereco_id_endereco			= en.id_endereco
+                    left join curso_pessoa cp 	on pe.id_pessoa 					= cp.pessoa_id_pessoa
+                    left join curso cs 			on cs.id_curso 						= cp.curso_id_curso
+                    limit {$itensPorPagina} offset {$paginaAtual}";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $usuarios;
+        }
+        catch (PDOException $exc)
+        {
+            echo $exc->getMessage();
+        }
+    }
+
+
+
     //edita uma pessoa
     public function editarPessoa(PessoaDTO $pessoaDTO)
     {
@@ -129,6 +160,38 @@ class PessoaDAO
         catch (PDOException $exc)
         {
             echo $exc->getMessage();
+        }
+    }
+
+
+
+    //enchendo o banco de dados
+    //cadastra uma pessoa
+    public function enchendoBanco()
+    {
+        try
+        {
+            //CALL `bd_cadastropessoa`.`cadastra_pessoa`('nome', 'apelido', 'login', 'senha', 'cpf', 'rg', 'numero de telefone', tipo de usuario,
+            //						                     'endereço residencial', 'endereço trabalho','email', 'senha email', 'nome do curso');
+            $sql = "CALL `bd_cadastropessoa`.`cadastra_pessoa`('rogerio', '', 'login', 'senha', 'cpf', 'rg', 'numero de telefone', 1, 
+ 						'endereço residencial', 'endereço trabalho','email', 'senha email', 'nome do curso', @sucesso)";
+
+            $stmt = $this->pdo->prepare($sql);
+            $sucesso = $stmt->execute();
+            return $sucesso;
+
+        }
+        catch (PDOException $exc)
+        {
+            //mostra mensagem de erro dizendo que ja existe um usuario cadastrado
+            //com o mesmo nome
+            if ($exc->getCode() == 23000) {
+                $msg = "Usuario Existente crie outro usuario";
+                header("location: /Belfort/views/cadastroClienteContrato.php?mensagem=" . $msg);
+                exit();
+            } else {
+                echo $exc->getMessage();
+            }
         }
     }
 

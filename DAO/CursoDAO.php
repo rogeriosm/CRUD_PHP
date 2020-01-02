@@ -2,7 +2,7 @@
 //conexao com banco de dados
 require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/DAO/conexao/conexao.php';
 //classe de regra de negocio
-class LoginDAO
+class CursoDAO
 {
     public $pdo = null;
 
@@ -12,21 +12,22 @@ class LoginDAO
         $this->pdo = Conexao::conecta_db();
     }
 
-    //busca um usuario no banco de dados
-    function buscaUsuarioLogado(PessoaDTO $pessoaDTO)
+    //busca curso no banco de dados
+    function buscaCurso()
     {
         try {
             //busca um usuario para comprar a senha
-            $sql = "select * from pessoa where login = ?";
+            $sql = "select * from curso";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(1, $pessoaDTO->getLogin());
             $stmt->execute();
-            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $usuario;
+            $curso = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $curso;
 
         } catch (PDOException $exc) {
             echo $exc->getMessage();
         }
 
     }
+
+    //
 }
