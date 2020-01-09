@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 <!--fontes awesome-->
-<link rel="stylesheet" href="">
-<script src=""></script>
+<link href="/crud_php/resources/fonts/all.css" rel="stylesheet" type="text/css"/>
+<script src="/crud_php/resources/fonts/all.js" type="text/javascript"></script>
 
 <!--style geral-->
 <link rel="stylesheet" href="/crud_php/resources/css/style.css">

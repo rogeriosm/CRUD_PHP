@@ -3,6 +3,7 @@
 
 class PessoaDTO
 {
+    private $idPessoa;
     private $nome;
     private $apelido;
     private $cpf;
@@ -225,5 +226,19 @@ class PessoaDTO
         $this->curso = $curso;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getIdPessoa()
+    {
+        return $this->idPessoa;
+    }
 
+    /**
+     * @param mixed $idPessoa
+     */
+    public function setIdPessoa($idPessoa): void
+    {
+        $this->idPessoa = $idPessoa;
+    }
 }

@@ -8,7 +8,7 @@
 <body>
 <!--ferifica a existencia de mensagens no get e mostra na tela-->
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/view/configuracoes/MensagensCadastro.php'; ?>
-<div class="container">
+<div class="container-fluid">
     <h1>Essa pagina so pode ser acessada se estiver logado</h1>
 
     <!--cabecalho-->
@@ -26,9 +26,9 @@
                 <?php require_once $_SERVER['DOCUMENT_ROOT'] . "/crud_php/view/configuracoes/FotoPerfil.php" ?>
                 <!--form para alterar a foto do perfil-->
                 <form method="post" action="/crud_php/controle/SalvarFotosPerfil.php" enctype="multipart/form-data">
-                    <label for="fotoPerfil" class="btn btn-outline-dark btn-sm">Selecionar Foto</label>
-                    <input type="file" name="fotoPerfil" id="fotoPerfil" class="inputtypefile">
-                    <input type="submit" value="Alterar" class="btn btn-success btn-sm">
+                    <label for="fotoPerfil" class="btn btn-outline-dark btn-sm">Selecionar Foto <i class="fas fa-camera"></i></label>
+                    <input type="file" name="fotoPerfil" id="fotoPerfil" class="inputtypefile"><br>
+                    <input type="submit" value="Alterar Foto" class="btn btn-success btn-sm">
                 </form>
             </div>
             <!--botão para deslogar do sistema-->
@@ -40,11 +40,13 @@
         <!--principal-->
         <main class="col-10">
             <a class="btn btn-outline-dark btn-sm" href="/crud_php/view/FormPessoa.php?form=2">Cadastrar uma Pessoa</a>
+            <a class="btn btn-outline-dark btn-sm" href="/crud_php/view/paginasRestritas/Pesquisar.php">Pesquisar uma Pessoa <i class="fas fa-search"></i></a>
             <!--listar pessoas cadastradas-->
             <table class="table table-hover table-dark table-sm">
                 <thead>
                 <tr>
-                    <th scope="col">Tipo de Usuario</th>
+                    <th scope="col">id</th>
+                    <th scope="col">Descrição</th>
                     <th scope="col">Nome</th>
                     <th scope="col">Apelido</th>
                     <th scope="col">Login</th>
@@ -52,8 +54,12 @@
                     <th scope="col">CPF</th>
                     <th scope="col">Numero</th>
                     <th scope="col">Residencial</th>
+                    <th scope="col">Trabalho</th>
                     <th scope="col">E-mail</th>
+                    <th scope="col">E-mail senha</th>
                     <th scope="col">Disciplina</th>
+                    <th scope="col">Edite</th>
+                    <th scope="col">Excluir</i></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,7 +94,7 @@
 
                     foreach ($buscaPessoasLimit as $c) {
                         echo "<tr>";
-                        echo "  <td>" . $c["id_pessoa"] . "</td>";
+                        echo "  <td>" . $c["id_pessoa"] . "-</td>";
                         echo "  <td>" . $c["descricao"] . "</td>";
                         echo "  <td>" . $c["nome"] . "</td>";
                         echo "  <td>" . $c["apelido"] . "</td>";
@@ -97,8 +103,20 @@
                         echo "  <td>" . $c["cpf"] . "</td>";
                         echo "  <td>" . $c["numero"] . "</td>";
                         echo "  <td>" . $c["residencial"] . "</td>";
+                        echo "  <td>" . $c["trabalho"] . "</td>";
                         echo "  <td>" . $c["email"] . "</td>";
+                        echo "  <td>" . $c["senha"] . "</td>";
                         echo "  <td>" . $c["disciplina"] . "</td>";
+
+                        echo "  <td>".
+                                    "<a href='/crud_php/view/FormPessoa.php?idPessoa={$c["id_pessoa"]}&form=3'><i class='fas fa-edit'></i></a>".
+                                "</td>";
+
+                        echo "  <td>".
+                                    "<a href='/crud_php/controle/ExcluiPessoaControle.php?idPessoa=".$c["id_pessoa"]."'><i class='fas fa-trash-alt'></i></a>".
+                                "</td>";
+
+
                         echo "</tr>";
                     }
                     ?>
@@ -122,8 +140,6 @@
                                 <span class="sr-only">Anterior</span>
                               </a>';
                     }
-
-                    //$j = ($paginaAtual < 2)?1:;
 
                     for ($i = ($paginaAtual-$limitePaginação); $i <= ($paginaAtual+$limitePaginação); $i++) {
                         if($i>=1 && $i <= $totalpaginacao) {
@@ -177,3 +193,17 @@
 </div>
 </body>
 </html>
+
+<!--nao mostrar o id do usuario no formulario-->
+<?php
+//edita um cadastro
+function editarPessoa($idPessoa = 0)
+{
+    if ($idPessoa > 0)
+    {
+        header("location: /crud_php/controle/EditeControle.php?idPessoa=".$idPessoa);
+    }
+}
+
+
+?>
