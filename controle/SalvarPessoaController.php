@@ -39,8 +39,9 @@ $pessoaDto->setCurso($curso);
 
 $pessoaDao = new PessoaDAO();
 
-//verifica se ja existe o login no bando de dados para que nao tenha repetição
+//verifica se o campo login foi preenchido
 if (!empty($pessoaDto->getLogin($login))) {
+    //verifica se ja existe o login no bando de dados para que nao tenha repetição
     $retorno = $pessoaDao->buscarLogin($pessoaDto);
     if (!empty($retorno['login'])) {
         header("location: /crud_php/view/FormPessoa.php?form={$paginaForm}&msgErrLogEx=1");
@@ -69,6 +70,10 @@ if ($sucesso) {
         case '2':
             header("location: /crud_php/view/FormPessoa.php?form={$paginaForm}&msgCadSuc=1");
             exit();
+            break;
+        case '3':
+            header("location: /crud_php/view/paginasRestritas/Home.php?msgEdit=1");
+            exit("erro salvarpessoacontrole");
             break;
         default:
             header("location: /crud_php/index.php?erroUrl=1");

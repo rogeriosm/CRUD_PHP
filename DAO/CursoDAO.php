@@ -12,11 +12,10 @@ class CursoDAO
         $this->pdo = Conexao::conecta_db();
     }
 
-    //busca curso no banco de dados
+    //busca todos os cursos cadastrados no banco de dados
     function buscaCurso()
     {
         try {
-            //busca um usuario para comprar a senha
             $sql = "select * from curso";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
