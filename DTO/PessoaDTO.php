@@ -1,6 +1,4 @@
 <?php
-
-
 class PessoaDTO
 {
     private $idPessoa;
@@ -240,5 +238,30 @@ class PessoaDTO
     public function setIdPessoa($idPessoa): void
     {
         $this->idPessoa = $idPessoa;
+    }
+
+    //distribuindo os valores
+    public function setValores($array = array())
+    {
+        //senha gerada com a api do php
+        $senha       = (isset($array['senha']))?password_hash($array['senha'], PASSWORD_BCRYPT):null;
+        $id_pessoa   = (isset($array['idPessoa']))?$array['idPessoa']:null;
+        //cadrastros que nao tenham um usuario definido sao do tipo usuario
+        $tipoUsuario = (isset($array['tipoUsuario']))? $array['tipoUsuario'] : "1";
+
+        $this->setIdPessoa      ($id_pessoa);//id_pessoa
+        $this->setSenha         ($senha);//senha
+        $this->setTipoUsuario   ($tipoUsuario);
+        $this->setNome          ((isset($array['nome']))			?$array['nome']			:null);
+        $this->setApelido       ((isset($array['apelido']))		?$array['apelido']		:null);
+        $this->setCpf           ((isset($array['cpf']))			    ?$array['cpf']			:null);
+        $this->setRg            ((isset($array['rg']))			    ?$array['rg']			:null);
+        $this->setLogin         ((isset($array['login']))			?$array['login']		:null);
+        $this->setTelefone      ((isset($array['telefone']))		?$array['telefone']		:null);
+        $this->setEnResidencia  ((isset($array['enResidencia']))	?$array['enResidencia']:null);
+        $this->setEnTrabalho    ((isset($array['enTrabalho']))	?$array['enTrabalho']	:null);
+        $this->setEmail         ((isset($array['email']))			?$array['email']		:null);
+        $this->setEmailSenha    ((isset($array['emailSenha'])) ?$array['emailSenha']	:null);
+        $this->setCurso         ((isset($array['curso']))			?$array['curso']		:null);
     }
 }

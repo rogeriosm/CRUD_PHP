@@ -5,12 +5,12 @@ if (!empty($_GET["msgErrLogEx"]))
 {
     echo "<div id='errorCadastro' class='erroMsg'>Login existente!</div>";
 }
-//mensagem de sucesso ao cadastrar novo usuario
+//mensagem de sucesso ao cadastrar novo usuário
 if (!empty($_GET["msgCadSuc"]))
 {
     echo "<div id='casdastroSucess' class='sucMsg'>Cadastrado com sucesso!</div>";
 }
-//mensagem de erro ao cadastrar novo usuario
+//mensagem de erro ao cadastrar novo usuário
 if (!empty($_GET["msgCadErr"]))
 {
     echo "<div id='casdastroErro' class='erroMsg'>Cadastrado com sucesso!</div>";
@@ -34,7 +34,7 @@ if (!empty($_GET["msgErrlog"]))
 //indentificando de qual formulario esta vindo o cadastro
 if (!empty($_GET["errForm"]))
 {
-    echo "<div id='errForm' class='erroMsg'> não foi possível cadastrar usuario!<br>entre em contato com o administrador do site!</div>";
+    echo "<div id='errForm' class='erroMsg'> não foi possível cadastrar usuário!<br>entre em contato com o administrador do site!</div>";
 }
 //verifica pagina acessadas por url
 if (!empty($_GET["erroUrl"]))
@@ -45,7 +45,7 @@ if (!empty($_GET["erroUrl"]))
 //retorna um erro por nao conseguir criar uma pasta, pode ser compatibilidade com sistemas do servidor
 if (!empty($_GET["errForm"]))
 {
-    echo "<div id='errForm' class='erroMsg'>Não foi possivel criar a pasta de midia do usuario</div>";
+    echo "<div id='errForm' class='erroMsg'>Não foi possivel criar a pasta de midia do usuário</div>";
 }
 //retorna um erro por nao conseguir fazer o upload da imagem ou tentar fazer upload sem imagem
 if(!empty($_GET["errUplImg"]))
@@ -75,7 +75,7 @@ if(!empty($_GET["msgEdit"]))
 //retorna um erro por nao conseguir fazer o upload da imagem ou tentar fazer upload sem imagem
 if(!empty($_GET["msgExErr"]))
 {
-    echo "<div id='excluidoErro' class='erroMsg'>Erro ao excluir usuario.</div>";
+    echo "<div id='excluidoErro' class='erroMsg'>Erro ao excluir usuário.</div>";
 }
 
 
