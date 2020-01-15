@@ -5,6 +5,7 @@ $pessoaDAO = new PessoaDAO();
 
 //recebendo id pelo get
 $idPessoa = $_GET['idPessoa'];
+
 //excluindo registro se nao estiver vazio
 if(!empty($idPessoa))
 {

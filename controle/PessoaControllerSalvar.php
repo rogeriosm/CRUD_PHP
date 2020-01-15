@@ -2,52 +2,32 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/DTO/PessoaDTO.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/DAO/PessoaDAO.php';
 
-//recebendo os valores do post
-$paginaForm         = $_POST['form'];
-$nome               = $_POST['nome'];
-$apelido            = $_POST['apelido'];
-$cpf                = $_POST['cpf'];
-$rg                 = $_POST['rg'];
-$login              = $_POST['login'];
-//senha gerada com a api do php
-$senha              = password_hash($_POST['senha'], PASSWORD_BCRYPT);
-$telefoneNumero     = $_POST['telefone'];
-//cadrastros que nao tenham um usuario logado sao do tipo usuario
-$tipoUsuario        = (!isset($_POST['tipoUsuario']))? "1" : $_POST['tipoUsuario'];
-$enResidencia       = $_POST['enResidencia'];
-$enTrabalho         = $_POST['enTrabalho'];
-$email              = $_POST['email'];
-$emailSenha         = $_POST['emailSenha'];
-$curso              = $_POST['curso'];
+//formulario
+$paginaForm = $_POST['form'];
 
-//criando uma classe pessoa
+//criando uma pessoa
 $pessoaDto = new PessoaDTO();
 
-$pessoaDto->setNome($nome);
-$pessoaDto->setApelido($apelido);
-$pessoaDto->setCpf($cpf);
-$pessoaDto->setRg($rg);
-$pessoaDto->setLogin($login);
-$pessoaDto->setSenha($senha);
-$pessoaDto->setTelefone($telefoneNumero);
-$pessoaDto->setTipoUsuario($tipoUsuario);
-$pessoaDto->setEnResidencia($enResidencia);
-$pessoaDto->setEnTrabalho($enTrabalho);
-$pessoaDto->setEmail($email);
-$pessoaDto->setEmailSenha($emailSenha);
-$pessoaDto->setCurso($curso);
+//setando os dados do formulario
+$pessoaDto->setValores($_POST);
 
+//criando uma ligação com o banco de dados
 $pessoaDao = new PessoaDAO();
 
 //verifica se o campo login foi preenchido
-if (!empty($pessoaDto->getLogin($login))) {
+if (!empty($pessoaDto->getLogin()))
+{
     //verifica se ja existe o login no bando de dados para que nao tenha repetição
-    $retorno = $pessoaDao->buscarLogin($pessoaDto);
-    if (!empty($retorno['login'])) {
+    $retorno = $pessoaDao->buscarLogin($pessoaDto->getLogin());
+    //verifica se retorno login foi setado e redireciona para form com erro
+    if (isset($retorno['login'])) {
         header("location: /crud_php/view/FormPessoa.php?form={$paginaForm}&msgErrLogEx=1");
         exit();
     }
-}else{
+}
+else
+{
+    //caso campo login nao tenha sido prenchido redireciona para pagina de formulario
     header("location: /crud_php/view/FormPessoa.php?errFormLog=1&form={$paginaForm}");
     exit();
 }
@@ -84,4 +64,3 @@ if ($sucesso) {
     header("location: /crud_php/view/FormPessoa.php?msgCadErr=1");
     exit();
 }
-

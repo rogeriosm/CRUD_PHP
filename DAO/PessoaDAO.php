@@ -15,8 +15,7 @@ class PessoaDAO
     {
         try
         {
-            //CALL `bd_cadastropessoa`.`cadastra_pessoa`('nome', 'apelido', 'login', 'senha', 'cpf', 'rg', 'numero de telefone', tipo de usuario,
-            //						                     'endereço residencial', 'endereço trabalho','email', 'senha email', 'nome do curso');
+
             $sql = "CALL `bd_cadastropessoa`.`cadastra_pessoa`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @return)";
 
             $stmt = $this->pdo->prepare($sql);
@@ -39,11 +38,9 @@ class PessoaDAO
         }
         catch (PDOException $exc)
         {
-            //mostra mensagem de erro dizendo que ja existe um usuario cadastrado
-            //com o mesmo nome
             if ($exc->getCode() == 23000) {
                 $msg = "Usuario Existente crie outro usuario";
-                header("location: /Belfort/views/cadastroClienteContrato.php?mensagem=" . $msg);
+                header("location: /crud_php/index.php?mensagem=" . $msg);
                 exit();
             } else {
                 echo $exc->getMessage();
@@ -51,7 +48,7 @@ class PessoaDAO
         }
     }
 
-    //lista uma pessoa
+    //busca uma pessoa por id para o edite
     public function listarPessoa($idPessoa)
     {
         try
@@ -82,13 +79,35 @@ class PessoaDAO
         }
     }
 
-    //lista todos cadastros
-    public function listarTodasPessoas()
+    //contador para paginacao, pesquisa uma pessoa por nome
+    public function countPessoa($nome)
     {
         try
         {
-            $sql = "select pe.id_pessoa, tu.descricao, pe.nome, pe.apelido, pe.login, 
-                    dc.rg, dc.cpf, tel.numero, en.residencial, en.trabalho, ema.email, ema.senha, cs.disciplina  
+            $sql = "select count(*) as totalPessoa
+                    from pessoa
+                    where nome like  '%{$nome}%';";
+
+            $stmt = $this->pdo->prepare($sql);
+            //$stmt->bindValue(1,'%'.$nome.'%');
+            $stmt->execute();
+            $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $usuarios['totalPessoa'];
+        }
+        catch (PDOException $exc)
+        {
+            echo $exc->getMessage();
+        }
+    }
+
+    //pesquisa pessoa por nome mais limite da pagina
+    public function buscarPessoaLimit($nome,$itensPorPagina, $paginaAtual)
+    {
+        try
+        {
+            $sql = "select pe.id_pessoa, tu.descricao, tu.id_tipo_usuario, pe.nome, pe.apelido, pe.login, 
+                    dc.rg, dc.cpf, tel.numero, en.residencial, en.trabalho, ema.email, ema.senha as email_senha, 
+                    cs.disciplina, cs.id_curso
                     from pessoa pe
                     inner join tipo_usuario tu 	on pe.tipo_usuario_id_tipo_usuario 	= tu.id_tipo_usuario
                     left join documento dc 		on pe.id_pessoa 					= dc.pessoa_id_pessoa
@@ -96,12 +115,32 @@ class PessoaDAO
                     left join endereco en 		on pe.id_pessoa 					= en.pessoa_id_pessoa
                     left join email ema 		on ema.endereco_id_endereco			= en.id_endereco
                     left join curso_pessoa cp 	on pe.id_pessoa 					= cp.pessoa_id_pessoa
-                    left join curso cs 			on cs.id_curso 						= cp.curso_id_curso";
+                    left join curso cs 			on cs.id_curso 						= cp.curso_id_curso
+                    where pe.nome like  '%{$nome}%'
+                    limit {$itensPorPagina} offset {$paginaAtual};";
 
             $stmt = $this->pdo->prepare($sql);
+            //$stmt->bindValue(1,'%'.$nome.'%');
             $stmt->execute();
             $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $usuarios;
+        }
+        catch (PDOException $exc)
+        {
+            echo $exc->getMessage();
+        }
+    }
+
+    //contador para paginação, mostra quantidade total de pessoas cadastradas
+    public function countPessoas()
+    {
+        try
+        {
+            $sql = "select count(*) as totalPessoa from pessoa;";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $usuarios['totalPessoa'];
         }
         catch (PDOException $exc)
         {
@@ -196,14 +235,14 @@ class PessoaDAO
     }
 
     //verifica se o login informado ja existe no banco de dados
-    public function buscarLogin (PessoaDTO $pessoaDTO)
+    public function buscarLogin ($login)
     {
         try
         {
             $sql = "select login from pessoa where login = ?";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(1,$pessoaDTO->getLogin());
+            $stmt->bindValue(1,$login);
             $stmt->execute();
             $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
             return $usuarios;
