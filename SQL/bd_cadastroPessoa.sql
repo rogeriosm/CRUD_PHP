@@ -170,8 +170,6 @@ CREATE TABLE IF NOT EXISTS `bd_cadastroPessoa`.`arquivo_multimidia` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-USE `bd_cadastroPessoa` ;
-
 -- -----------------------------------------------------
 -- procedure cadastra_pessoa
 -- -----------------------------------------------------
@@ -180,8 +178,8 @@ DELIMITER $$
 USE `bd_cadastroPessoa`$$
 CREATE PROCEDURE `cadastra_pessoa`
 (
-	-- tabela pessoa --
-	in p_nome varchar(255), in p_apelido varchar(255), in p_login varchar(255), in p_senha varchar(255),
+    -- tabela pessoa --
+    in p_nome varchar(255), in p_apelido varchar(255), in p_login varchar(255), in p_senha varchar(255),
     -- tabela documento --
     in p_cpf varchar(45), in p_rg varchar(45),
     -- tabela telefone --
@@ -190,9 +188,9 @@ CREATE PROCEDURE `cadastra_pessoa`
     in p_tipoUsuario int,
     -- tabela endereço --
     in p_residencial varchar(45), in p_trabalho varchar(45),
-    -- tabela email -- 
+    -- tabela email --
     in p_email varchar(45), in p_senha_email varchar(45),
-    -- tabela curso -- 
+    -- tabela curso --
     in p_curso varchar(45),
     -- retorna se a inserção foi bem sucedida --
     out `_rollback` bool
@@ -200,117 +198,178 @@ CREATE PROCEDURE `cadastra_pessoa`
 BEGIN
     DECLARE `_rollback` BOOL DEFAULT 0;
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET `_rollback` = 1;
-    
-START TRANSACTION;
--- verifica se os campos estao vazios e seta null para forçar um rollback
+
+    START TRANSACTION;
+    -- verifica se os campos estao vazios e seta null para forçar um rollback
 -- foi passado essa obrigação para o bando de dados para garantir a segurança
 -- caso o programador esqueça de fazer a verificação de entrada de dados no formulario
 
-	if p_nome = '' then
-		set p_nome = null;
-	end if;
-	if p_login = '' then
-		set p_login = null;
-	end if;
-	if p_senha = '' then
-		set p_senha = null;
-	end if;
-	if p_tipoUsuario = '' then
-		set p_tipoUsuario = null;
-	end if;
-	if p_email then            
-		set p_email = null;
-	end if;
+    if p_nome is null or p_nome = '' then
+        set p_nome = null;
+    end if;
+    if p_login is null or p_login = '' then
+        set p_login = null;
+    end if;
+    if p_senha is null or p_senha = '' then
+        set p_senha = null;
+    end if;
+    if p_tipoUsuario is null or p_tipoUsuario = '' then
+        set p_tipoUsuario = null;
+    end if;
+    if p_email is null or p_email then
+        set p_email = null;
+    end if;
 
 -- se os campos nao obrigatorios nao forem preenchidos, sera inserido o valor default
 
-	if p_apelido = '' or p_apelido is null then
-		set p_apelido = 'Não Informado';
-	end if;
-	if p_rg = '' or p_rg is null then
-		set p_rg = 'Não Informado';
-	end if;
-	if p_cpf = '' or p_cpf is null then
-		set p_cpf = 'Não Informado';
-	end if;
-	if p_telefoneNumero = '' or p_telefoneNumero is null then
-		set p_telefoneNumero = 'Não Informado';
-	end if;
-	if p_residencial = '' or p_residencial is null then
-		set p_residencial = 'Não Informado';
-	end if;
-	if p_trabalho = '' or p_trabalho is null then
-		set p_trabalho = 'Não Informado';
-	end if;
-	if p_senha_email = '' or p_senha_email is null then
-		set p_senha_email = 'Não Informado';
-	end if;
-	if p_curso = '' or p_curso is null then
-		set p_curso = 'Não Informado';
-	end if;
-	
+    if p_apelido = '' or p_apelido is null then
+        set p_apelido = 'Não Informado';
+    end if;
+    if p_rg = '' or p_rg is null then
+        set p_rg = 'Não Informado';
+    end if;
+    if p_cpf = '' or p_cpf is null then
+        set p_cpf = 'Não Informado';
+    end if;
+    if p_telefoneNumero = '' or p_telefoneNumero is null then
+        set p_telefoneNumero = 'Não Informado';
+    end if;
+    if p_residencial = '' or p_residencial is null then
+        set p_residencial = 'Não Informado';
+    end if;
+    if p_trabalho = '' or p_trabalho is null then
+        set p_trabalho = 'Não Informado';
+    end if;
+    if p_senha_email = '' or p_senha_email is null then
+        set p_senha_email = 'Não Informado';
+    end if;
+    if p_curso = '' or p_curso is null then
+        set p_curso = 'Não Informado';
+    end if;
 
--- cadastrando uma pesseoa so com os dados principais 
+
+    -- cadastrando uma pesseoa so com os dados principais
 -- ter certeza que tem tipos de usuarios cadastrados na tabela tipos de usuario
-	INSERT INTO `bd_cadastropessoa`.`pessoa` 
-	(`id_pessoa`, `nome`, `login`, `senha`, `apelido`,`tipo_usuario_id_tipo_usuario`) 
-	VALUES 
-	(default, p_nome, p_login, p_senha, p_apelido, p_tipoUsuario);
+    INSERT INTO `bd_cadastropessoa`.`pessoa`
+    (`id_pessoa`, `nome`, `login`, `senha`, `apelido`,`tipo_usuario_id_tipo_usuario`)
+    VALUES
+    (default, p_nome, p_login, p_senha, p_apelido, p_tipoUsuario);
 -- busaca o ID do ultimo item inserido e coloca dentro da variavel @id_documento;
-	select last_insert_id() into @id_pessoa;
-            
+    select last_insert_id() into @id_pessoa;
+
 -- cadastra um documento e liga a uma pessoa
-	insert into `bd_cadastropessoa`.`documento`
-	(id_documento, rg, cpf, pessoa_id_pessoa)
-	values
-	(default, p_rg, p_cpf, @id_pessoa);	
-        
+    insert into `bd_cadastropessoa`.`documento`
+    (id_documento, rg, cpf, pessoa_id_pessoa)
+    values
+    (default, p_rg, p_cpf, @id_pessoa);
+
 -- cadastra um telefone e liga a uma pessoa
-	insert into `bd_cadastropessoa`.`telefone`
-	(id_telefone, numero, pessoa_id_pessoa)
-	values
-	(default, p_telefoneNumero, @id_pessoa);
-         
+    insert into `bd_cadastropessoa`.`telefone`
+    (id_telefone, numero, pessoa_id_pessoa)
+    values
+    (default, p_telefoneNumero, @id_pessoa);
+
 -- insere no banco de dados o endereço tabalho e residencial
-	insert into `bd_cadastropessoa`.`endereco`
-	(id_endereco, residencial, trabalho, pessoa_id_pessoa)
-	values
-	(default, p_residencial, p_trabalho, @id_pessoa);
+    insert into `bd_cadastropessoa`.`endereco`
+    (id_endereco, residencial, trabalho, pessoa_id_pessoa)
+    values
+    (default, p_residencial, p_trabalho, @id_pessoa);
     -- busaca o ultimo id inserido e coloca dentro da variavel @id_endereco;
-	select last_insert_id() into @id_endereco;
-   
+    select last_insert_id() into @id_endereco;
+
 -- cadastra um email e senha e liga a um endereço
-	insert into `bd_cadastropessoa`.`email`
-	(id_email, email, senha, endereco_id_endereco)
-	values
-	(default, p_email, p_senha_email, @id_endereco);
-    
--- cadastra um curso
-	insert into `bd_cadastropessoa`.`curso`
-	(id_curso, disciplina)
-	values
-	(default, p_curso);
-    -- busaca o ultimo id inserido e coloca dentro da variavel @id_curso;
-	select last_insert_id() into @id_curso;
-    
--- liga o curso a pessoa cadastrado
-	insert into `bd_cadastropessoa`.`curso_pessoa`
-	(`curso_id_curso`, `pessoa_id_pessoa`) 
-    VALUES 
-    (@id_curso, @id_pessoa);
-        
+    insert into `bd_cadastropessoa`.`email`
+    (id_email, email, senha, endereco_id_endereco)
+    values
+    (default, p_email, p_senha_email, @id_endereco);
+
+-- 	liga o curso a pessoa cadastrado
+    insert into `bd_cadastropessoa`.`curso_pessoa`
+    (`curso_id_curso`, `pessoa_id_pessoa`)
+    VALUES
+    (p_curso, @id_pessoa);
+
 -- se nao hover erro finaliza a procedure com o commit e retorna sucesso
-	IF `_rollback` THEN
-		ROLLBACK;
-	ELSE
-		COMMIT;
-	END IF;
-	-- retorna se foi cadastrado com sucesso ou nao
-	select `_rollback`;
+    IF `_rollback` THEN
+        ROLLBACK;
+    ELSE
+        COMMIT;
+    END IF;
+    -- retorna se foi cadastrado com sucesso ou nao
+    select `_rollback`;
 
 END$$
-
 DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure atualizar_pessoa
+-- -----------------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE `atualizar_pessoa`
+(
+    -- tabela pessoa --
+    in p_idpessoa int, in p_nome varchar(255), in p_apelido varchar(255), in p_login varchar(255), in p_senha varchar(255),
+    -- tabela documento --
+    in p_cpf varchar(45), in p_rg varchar(45),
+    -- tabela telefone --
+    in p_telefoneNumero varchar(45),
+    -- tabela tipoUsuario --
+    in p_tipoUsuario int,
+    -- tabela endereço --
+    in p_residencial varchar(45), in p_trabalho varchar(45),
+    -- tabela email --
+    in p_email varchar(45), in p_senha_email varchar(45),
+    -- tabela curso --
+    in p_curso int,
+    -- retorna se a inserção foi bem sucedida --
+    out `_rollback` bool
+)
+begin
+    DECLARE `_rollback` BOOL DEFAULT 0;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET `_rollback` = 1;
+
+    START TRANSACTION;
+
+    UPDATE `bd_cadastropessoa`.`curso_pessoa` 	SET `curso_id_curso` 	= p_curso
+    WHERE (`pessoa_id_pessoa` = p_idpessoa);
+
+    UPDATE `bd_cadastropessoa`.`documento` 		SET `rg` 				= p_rg, 			`cpf` 		= p_cpf
+    WHERE (`pessoa_id_pessoa` = p_idpessoa);
+
+    UPDATE `bd_cadastropessoa`.`endereco` 		SET `residencial` 		= p_residencial, 	`trabalho` = p_trabalho
+    WHERE (`pessoa_id_pessoa` = p_idpessoa);
+
+    UPDATE `bd_cadastropessoa`.`telefone` 		SET `numero` 			= p_telefoneNumero
+    WHERE (`pessoa_id_pessoa` = p_idpessoa);
+
+    UPDATE `bd_cadastropessoa`.`email` mail
+        inner join endereco en 						on en.id_endereco = mail.endereco_id_endereco
+    SET `email` = p_email, `senha` = p_senha_email
+    WHERE (en.pessoa_id_pessoa = p_idpessoa);
+
+    if p_senha != '' and p_senha is not null then
+        UPDATE `bd_cadastropessoa`.`pessoa`
+        SET `nome` = p_nome, `login` = p_login, `senha` = p_senha, `apelido` = p_apelido, `tipo_usuario_id_tipo_usuario` = p_tipoUsuario
+        WHERE (`id_pessoa` = p_idpessoa);
+    end if;
+
+    -- se nao hover erro finaliza a procedure com o commit e retorna sucesso
+    IF `_rollback` THEN
+        ROLLBACK;
+    ELSE
+        COMMIT;
+    END IF;
+    -- retorna se foi cadastrado com sucesso ou nao
+    select `_rollback`;
+
+END$$
+delimiter ;
+
+-- -----------------------------------------------------
+-- Views
+-- -----------------------------------------------------
+
 -- inserindo os tipos de usuario para evitar conflito
 
 INSERT INTO `bd_cadastropessoa`.`tipo_usuario` (`id_tipo_usuario`, `descricao`) VALUES ('1', 'usuario');

@@ -15,26 +15,24 @@ class PessoaDAO
     {
         try
         {
-
             $sql = "CALL `bd_cadastropessoa`.`cadastra_pessoa`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @return)";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(1, $pessoaDTO->getNome());
-            $stmt->bindValue(2, $pessoaDTO->getApelido());
-            $stmt->bindValue(3, $pessoaDTO->getLogin());
-            $stmt->bindValue(4, $pessoaDTO->getSenha());
-            $stmt->bindValue(5, $pessoaDTO->getCpf());
-            $stmt->bindValue(6, $pessoaDTO->getRg());
-            $stmt->bindValue(7, $pessoaDTO->getTelefone());
-            $stmt->bindValue(8, $pessoaDTO->getTipoUsuario());
-            $stmt->bindValue(9, $pessoaDTO->getEnResidencia());
-            $stmt->bindValue(10, $pessoaDTO->getEnTrabalho());
-            $stmt->bindValue(11, $pessoaDTO->getEmail());
-            $stmt->bindValue(12, $pessoaDTO->getEmailSenha());
-            $stmt->bindValue(13, $pessoaDTO->getCurso());
+            $stmt->bindValue(1, $pessoaDTO->getNome(), 2);
+            $stmt->bindValue(2, $pessoaDTO->getApelido(), 2);
+            $stmt->bindValue(3, $pessoaDTO->getLogin(), 2);
+            $stmt->bindValue(4, $pessoaDTO->getSenha(), 2);
+            $stmt->bindValue(5, $pessoaDTO->getCpf(), 2);
+            $stmt->bindValue(6, $pessoaDTO->getRg(), 2);
+            $stmt->bindValue(7, $pessoaDTO->getTelefone(), 2);
+            $stmt->bindValue(8, $pessoaDTO->getTipoUsuario(), 1);
+            $stmt->bindValue(9, $pessoaDTO->getEnResidencia(), 2);
+            $stmt->bindValue(10, $pessoaDTO->getEnTrabalho(), 2);
+            $stmt->bindValue(11, $pessoaDTO->getEmail(), 2);
+            $stmt->bindValue(12, $pessoaDTO->getEmailSenha(), 2);
+            $stmt->bindValue(13, $pessoaDTO->getCurso(), 1);
             $sucesso = $stmt->execute();
             return $sucesso;
-
         }
         catch (PDOException $exc)
         {
@@ -86,10 +84,10 @@ class PessoaDAO
         {
             $sql = "select count(*) as totalPessoa
                     from pessoa
-                    where nome like  '%{$nome}%';";
+                    where nome like  :nome";
 
             $stmt = $this->pdo->prepare($sql);
-            //$stmt->bindValue(1,'%'.$nome.'%');
+            $stmt->bindValue(':nome','%'.$nome.'%', PDO::PARAM_STR);
             $stmt->execute();
             $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
             return $usuarios['totalPessoa'];
@@ -116,11 +114,13 @@ class PessoaDAO
                     left join email ema 		on ema.endereco_id_endereco			= en.id_endereco
                     left join curso_pessoa cp 	on pe.id_pessoa 					= cp.pessoa_id_pessoa
                     left join curso cs 			on cs.id_curso 						= cp.curso_id_curso
-                    where pe.nome like  '%{$nome}%'
-                    limit {$itensPorPagina} offset {$paginaAtual};";
+                    where pe.nome like  :nome
+                    limit :itenPagina offset :paginaAtual";
 
             $stmt = $this->pdo->prepare($sql);
-            //$stmt->bindValue(1,'%'.$nome.'%');
+            $stmt->bindValue(':nome','%'.$nome.'%', PDO::PARAM_STR);
+            $stmt->bindValue(":itenPagina",$itensPorPagina,PDO::PARAM_INT);
+            $stmt->bindValue(":paginaAtual",$paginaAtual,PDO::PARAM_INT);
             $stmt->execute();
             $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $usuarios;
@@ -163,9 +163,11 @@ class PessoaDAO
                     left join email ema 		on ema.endereco_id_endereco			= en.id_endereco
                     left join curso_pessoa cp 	on pe.id_pessoa 					= cp.pessoa_id_pessoa
                     left join curso cs 			on cs.id_curso 						= cp.curso_id_curso
-                    order by id_pessoa limit {$itensPorPagina} offset {$paginaAtual}";
+                    order by id_pessoa limit :itenPagina offset :paginaAtual";
 
             $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(":itenPagina",$itensPorPagina,PDO::PARAM_INT);
+            $stmt->bindValue(":paginaAtual",$paginaAtual,PDO::PARAM_INT);
             $stmt->execute();
             $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $usuarios;
@@ -186,20 +188,20 @@ class PessoaDAO
             $sql = "CALL `bd_cadastropessoa`.`atualizar_pessoa`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @return);";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(1, $pessoaDTO->getIdPessoa());
-            $stmt->bindValue(2, $pessoaDTO->getNome());
-            $stmt->bindValue(3, $pessoaDTO->getApelido());
-            $stmt->bindValue(4, $pessoaDTO->getLogin());
-            $stmt->bindValue(5, $pessoaDTO->getSenha());
-            $stmt->bindValue(6, $pessoaDTO->getCpf());
-            $stmt->bindValue(7, $pessoaDTO->getRg());
-            $stmt->bindValue(8, $pessoaDTO->getTelefone());
-            $stmt->bindValue(9, $pessoaDTO->getTipoUsuario());
-            $stmt->bindValue(10, $pessoaDTO->getEnResidencia());
-            $stmt->bindValue(11, $pessoaDTO->getEnTrabalho());
-            $stmt->bindValue(12, $pessoaDTO->getEmail());
-            $stmt->bindValue(13, $pessoaDTO->getEmailSenha());
-            $stmt->bindValue(14, $pessoaDTO->getCurso());
+            $stmt->bindValue(1, $pessoaDTO->getIdPessoa()       , PDO::PARAM_INT);
+            $stmt->bindValue(2, $pessoaDTO->getNome()           , PDO::PARAM_STR);
+            $stmt->bindValue(3, $pessoaDTO->getApelido()        , PDO::PARAM_STR);
+            $stmt->bindValue(4, $pessoaDTO->getLogin()          , PDO::PARAM_STR);
+            $stmt->bindValue(5, $pessoaDTO->getSenha()          , PDO::PARAM_STR);
+            $stmt->bindValue(6, $pessoaDTO->getCpf()            , PDO::PARAM_STR);
+            $stmt->bindValue(7, $pessoaDTO->getRg()             , PDO::PARAM_STR);
+            $stmt->bindValue(8, $pessoaDTO->getTelefone()       , PDO::PARAM_STR);
+            $stmt->bindValue(9, $pessoaDTO->getTipoUsuario()    , PDO::PARAM_INT);
+            $stmt->bindValue(10, $pessoaDTO->getEnResidencia()  , PDO::PARAM_STR);
+            $stmt->bindValue(11, $pessoaDTO->getEnTrabalho()    , PDO::PARAM_STR);
+            $stmt->bindValue(12, $pessoaDTO->getEmail()         , PDO::PARAM_STR);
+            $stmt->bindValue(13, $pessoaDTO->getEmailSenha()    , PDO::PARAM_STR);
+            $stmt->bindValue(14, $pessoaDTO->getCurso()         , PDO::PARAM_INT);
             $sucesso = $stmt->execute();
             return $sucesso;
         }
@@ -210,7 +212,7 @@ class PessoaDAO
     }
 
     //exclui uma pessoa
-    //por tabela estar usando cascade, update e exclusao senrao executados em todas as tabelas
+    //por tabela estar usando cascade, update e exclusao serao executados em todas as tabelas
     //com FK
     public function excluirPessoa($idPessoa)
     {
@@ -219,7 +221,7 @@ class PessoaDAO
             $sql = "DELETE FROM pessoa WHERE id_pessoa = ?";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(1, $idPessoa);
+            $stmt->bindValue(1, $idPessoa, 1);
             $stmt->execute();
             $count = $stmt->rowCount();//retorna a quantidade de linhas alteradas
             if ($count > 0){
@@ -242,7 +244,7 @@ class PessoaDAO
             $sql = "select login from pessoa where login = ?";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(1,$login);
+            $stmt->bindValue(1,$login,2);
             $stmt->execute();
             $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
             return $usuarios;
@@ -277,8 +279,8 @@ class PessoaDAO
     {
         try
         {
-            //CALL `bd_cadastropessoa`.`cadastra_pessoa`('nome', 'apelido', 'login', 'senha', 'cpf', 'rg', 'numero de telefone', tipo de usuario,
-            //						                     'endereço residencial', 'endereço trabalho','email', 'senha email', 'nome do curso');
+            //('nome', 'apelido', 'login', 'senha', 'cpf', 'rg', 'numero de telefone', tipo de usuario,
+            //'endereço residencial', 'endereço trabalho','email', 'senha email', 'nome do curso');
             $sql = "CALL `bd_cadastropessoa`.`cadastra_pessoa`('rogerio', 'apelido', 'login', 'senha', 'cpf', 'rg', 'numero de telefone', 1, 
  						'endereço residencial', 'endereço trabalho','email', 'senha email', 1, @sucesso)";
 
@@ -293,7 +295,7 @@ class PessoaDAO
             //com o mesmo nome
             if ($exc->getCode() == 23000) {
                 $msg = "Usuario Existente crie outro usuario";
-                header("location: /Belfort/views/cadastroClienteContrato.php?mensagem=" . $msg);
+                header("location: /crud_php/index.php?mensagem=" . $msg);
                 exit();
             } else {
                 echo $exc->getMessage();

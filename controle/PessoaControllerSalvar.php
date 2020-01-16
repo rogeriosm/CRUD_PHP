@@ -20,7 +20,7 @@ if (!empty($pessoaDto->getLogin()))
     //verifica se ja existe o login no bando de dados para que nao tenha repetição
     $retorno = $pessoaDao->buscarLogin($pessoaDto->getLogin());
     //verifica se retorno login foi setado e redireciona para form com erro
-    if (isset($retorno['login'])) {
+    if (isset($retorno['login']) && !empty($retorno['login'])) {
         header("location: /crud_php/view/FormPessoa.php?form={$paginaForm}&msgErrLogEx=1");
         exit();
     }

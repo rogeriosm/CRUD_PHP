@@ -104,7 +104,7 @@ $id_tipoUsuario = (empty($usuarioEdite['id_tipo_usuario'])) ?""                 
                 //tiver um usuario logado, por ser so demonstração o cadastro de adm sera
                 //liberado para qualquer usuario logado
                     foreach ($tipoUsuario as $value){
-                        if (isset($_SESSION['login'])) {
+                        if (isset($_SESSION['login']) && !empty($_SESSION['login'])) {
                             echo "<option value='{$value['id_tipo_usuario']}'>{$value['descricao']}</option>";
                         }else if($value['id_tipo_usuario'] == 1){
                             echo "<option value='{$value['id_tipo_usuario']}'>{$value['descricao']}</option>";
@@ -113,7 +113,7 @@ $id_tipoUsuario = (empty($usuarioEdite['id_tipo_usuario'])) ?""                 
                     echo "
                 </select><br>";
                 //mostrando o campo com id do usuario a ser editado somento quando for clicado em editar
-                if(isset($_GET['idPessoa']) && $_GET['form'] == 3){
+                if(isset($_GET['idPessoa']) && !empty($_GET['idPessoa']) && $_GET['form'] == 3){
                     echo "<input type='hidden' class='input' name='idPessoa' id='idPessoa' value='{$_GET['idPessoa']}'><br>";
                 }
                 ?>
