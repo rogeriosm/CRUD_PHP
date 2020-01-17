@@ -1,0 +1,38 @@
+/*relacionado a modal de perfil*/
+:root{
+    --Preview-H: 500px;
+    --Preview-W: 500px;
+    --Preview-H-i: 450px;
+    --Preview-W-i: 500px;
+
+}
+#fundo {
+    opacity: 0.8;
+    background-color: #000;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 98;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#janela {
+    width: var(--Preview-W);
+    height: var(--Preview-H);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    background-color: #050713;
+    z-index: 99;
+    display: none;
+    border-radius: 10px;
+}
+
+.preview{
+    width: var(--Preview-W);
+    height: var(--Preview-H-i);
+    border-radius: 10px;
+}
