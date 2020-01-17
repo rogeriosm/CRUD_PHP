@@ -1,9 +1,11 @@
 <!--verifica se o formulario esta sendo chamado de alaguma pagina ou url-->
 <!--se for url ele redireciona para index-->
 <?php
+//se formPessoa for chamado por paginas que nao passem o parametro form ele atribui 1(usuario)
+$form = (empty($_GET['form'])||!isset($_GET['form']))?"1":$_GET['form'];
 session_start();
 //so permite o cadastro de usuarios nao logados com o tipo usuario
-if (!isset($_SESSION['login']) && $_GET['form'] != 1) {
+if (!isset($_SESSION['login']) && $form != 1) {
     //form com valores maiores que 1 so podem ser acessados com usuario logado
     //valores negativos caem no defalt da pagina salvar pessoas
     header("location: /crud_php/index.php?erroUrl=1");
@@ -16,7 +18,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/controle/ListarControle.php'
 $controleListar = new ListarControle();
 
 //usa a mesma pagina para editar ou cadastrar um usuario
-if (isset($_SESSION['login']) && $_GET['form'] == 3) {
+if (isset($_SESSION['login']) && $form == 3) {
     //se for para editar muda o caminho do post
     $page = "/crud_php/controle/PessoaControleEditar.php";
     //busca um usuario
@@ -113,12 +115,12 @@ $id_tipoUsuario = (empty($usuarioEdite['id_tipo_usuario'])) ?""                 
                     echo "
                 </select><br>";
                 //mostrando o campo com id do usuario a ser editado somento quando for clicado em editar
-                if(isset($_GET['idPessoa']) && !empty($_GET['idPessoa']) && $_GET['form'] == 3){
+                if(isset($_GET['idPessoa']) && !empty($_GET['idPessoa']) && $form == 3){
                     echo "<input type='hidden' class='input' name='idPessoa' id='idPessoa' value='{$_GET['idPessoa']}'><br>";
                 }
                 ?>
 
-            <input type="hidden" class="input" name="form" id="form" value="<?= $_GET['form']; ?>"><br>
+            <input type="hidden" class="input" name="form" id="form" value="<?= $form; ?>"><br>
             <input type="submit" class="btn btn btn-primary btn-lg" value="Enviar">
         </form>
     </main>

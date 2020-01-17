@@ -13,7 +13,7 @@ if (!empty($_GET["msgCadSuc"]))
 //mensagem de erro ao cadastrar novo usuário
 if (!empty($_GET["msgCadErr"]))
 {
-    echo "<div id='casdastroErro' class='erroMsg'>Cadastrado com sucesso!</div>";
+    echo "<div id='casdastroErro' class='erroMsg'>Erro ao cadastrar usuário</div>";
 }
 //mensagem de deslogado do sistema
 if (!empty($_GET["msgDesl"]))
