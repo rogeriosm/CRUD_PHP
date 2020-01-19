@@ -89,7 +89,7 @@ $id_tipoUsuario = (empty($usuarioEdite['id_tipo_usuario'])) ?""                 
             e-mail senha<br>
             <input type="text" name="emailSenha" id="emailSenha" class="input" value="<?=$email_senha?>"><br>
             Curso<br>
-            <select name="curso" id="curso" class="input">
+            <select name="curso" id="curso" class="input" required>
                 <option value='<?=$id_curso?>'><?=$disciplina?></option>
                 <?php
                     foreach ($cursos as $value){
@@ -99,7 +99,7 @@ $id_tipoUsuario = (empty($usuarioEdite['id_tipo_usuario'])) ?""                 
             </select><br>
 
             <label for='tipoUsuario'> Tipo de usuario </label><br>
-            <select class='input' name='tipoUsuario' id='tipoUsuario'>
+            <select class='input' name='tipoUsuario' id='tipoUsuario' required>
                 <option value='<?=$id_tipoUsuario?>'><?=$descricao?></option>
                 <?php
                 //opção de cadastrar um usuario ou administrador so aparece quando

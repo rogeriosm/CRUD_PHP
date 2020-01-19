@@ -15,7 +15,7 @@ $login = $loginDAO->buscaUsuario($pessoaDTO);
 
 if(password_verify($_POST['senha'], $login['senha'])){
     $_SESSION['login'] = $login['login'];
-    $_SESSION['tipo']  = $login['tipo_usuario_id_tipo_usuario'];
+    $_SESSION['idPessoa']  = $login['id_pessoa'];
     header('location: /crud_php/view/paginasRestritas/Home.php?msglog=1');
 }else{
     header('location: /crud_php/view/login.php?msgErrlog=1');

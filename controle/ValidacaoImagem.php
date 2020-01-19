@@ -1,4 +1,30 @@
 <?php
+/**
+ *Ao enviar um formulário de upload, a variável $_FILES["arquivo"]["error"] poderá conter os seguintes valores:
+ *
+ *UPLOAD_ERR_OK
+ *Valor: 0; não houve erro, o upload foi bem sucedido.
+ *
+ *UPLOAD_ERR_INI_SIZE
+ *Valor 1; O arquivo no upload é maior do que o limite definido em upload_max_filesize no php.ini.
+ *
+ *UPLOAD_ERR_FORM_SIZE
+ *Valor: 2; O arquivo ultrapassa o limite de tamanho em MAX_FILE_SIZE que
+ *foi especificado no formulário html.
+ *
+ *UPLOAD_ERR_PARTIAL
+ *Valor: 3; o upload do arquivo foi feito parcialmente.
+ *
+ *UPLOAD_ERR_NO_FILE
+ *Valor: 4; Não foi feito o upload do arquivo.
+*/
+
+//se der algum erro no upload voltar para home
+if($arquivo['error'] > 0){
+    //voltar para pagina de cadastro de imagem caso nao seja enviado imagens
+    header('location: /crud_php/view/paginasRestritas/Home.php?errUplImg=2');
+    exit();
+}
 
 //VERIFICANDO A EXISTENCIA E FAZENDO A VALIDACAO DO ARQUIVO EM TRÊS CONDIÇÕES
 if(!empty($arquivo['name']))
@@ -23,10 +49,13 @@ if(!empty($arquivo['name']))
     }
     //verificando se nao hover erro na validação
     if(count($error) > 0){
-        foreach($error as $msg){
-            echo '<li>'.$msg.'</li>';
-        }
-        //voltar para pagina de cadastro de imagem mostrando as mensagens
+        //mudar logica para redirecionar pagina com todas as mensagens de erro
+//        foreach($error as $msg){
+//            echo '<li>'.$msg.'</li>';
+//        }
+        //voltar para pagina de cadastro de imagem caso nao seja enviado imagens
+        header('location: /crud_php/view/paginasRestritas/Home.php?errUplImg=3');
+        exit();
         exit();
     }
 }

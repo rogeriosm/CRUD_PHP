@@ -10,8 +10,8 @@ $arquivo = $_FILES['fotoPerfil'];
 //que possam ser gerados ao tentar inserir a media
 $error = array();
 
-//definindo limitaçoes para imagens upadas
-$mg         = 1;               //20MB diz o tamanho da imagem a ser salva
+//definindo restriçoes para upload de imagens
+$mg         = 10;               //20MB diz o tamanho da imagem a ser salva
 $largura    = 2280;		        //2280px
 $altura     = 1280;		        //1280px
 $tamanho    = 1000000 * $mg;	//1 = 1000000
@@ -26,8 +26,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/crud_php/controle/ValidacaoImagem.php';
 // O padrão é retornar todos os elementos
 $extension = pathinfo($arquivo['name'],PATHINFO_EXTENSION);
 
-//cria um nome para o arquivo baseado no dia e hora que foi inserido
-//no sistema para nao gerar conflitos na pasta do servidor
+//cria um nome para o arquivo se ele existir sobrescreve
 $nome_imagem = 'perfil.'.$extension;
 
 

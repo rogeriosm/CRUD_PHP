@@ -10,7 +10,7 @@ class PessoaDAO
         $this->pdo = Conexao::conecta_db();
     }
 
-    //cadastra uma pessoa
+    //cadastra uma tupla
     public function salvarPessoa(PessoaDTO $pessoaDTO)
     {
         try
@@ -46,13 +46,12 @@ class PessoaDAO
         }
     }
 
-    //busca uma pessoa por id para o edite
+    //busca uma tupla por id para o editar
     public function listarPessoa($idPessoa)
     {
         try
         {
-            //mudar para quantidade e nao trazer uma registro
-            $sql = "select pe.id_pessoa, tu.descricao, tu.id_tipo_usuario, pe.nome, pe.apelido, pe.login, 
+            $sql = "select tu.descricao, tu.id_tipo_usuario, pe.nome, pe.apelido, pe.login, 
                     dc.rg, dc.cpf, tel.numero, en.residencial, en.trabalho, ema.email, ema.senha as email_senha, 
                     cs.disciplina, cs.id_curso
                     from pessoa pe
@@ -180,7 +179,7 @@ class PessoaDAO
 
 
 
-    //edita uma pessoa
+    //atualiza uma tupla
     public function editarPessoa(PessoaDTO $pessoaDTO)
     {
         try
@@ -241,7 +240,7 @@ class PessoaDAO
     {
         try
         {
-            $sql = "select login from pessoa where login = ?";
+            $sql = "select id_pessoa, login from pessoa where login = ?";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(1,$login,2);

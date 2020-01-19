@@ -17,7 +17,7 @@ class LoginDAO
     {
         try {
             //busca um usuario para comparar a senha
-            $sql = "select login, senha, tipo_usuario_id_tipo_usuario from pessoa where login = ?";
+            $sql = "select id_pessoa, login, senha from pessoa where login = ?";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(1, $pessoaDTO->getLogin());
             $stmt->execute();

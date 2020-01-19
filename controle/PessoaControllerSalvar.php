@@ -18,9 +18,9 @@ $pessoaDao = new PessoaDAO();
 if (!empty($pessoaDto->getLogin()))
 {
     //verifica se ja existe o login no bando de dados para que nao tenha repetição
-    $retorno = $pessoaDao->buscarLogin($pessoaDto->getLogin());
-    //verifica se retorno login foi setado e redireciona para form com erro
-    if (isset($retorno['login']) && !empty($retorno['login'])) {
+    $buscaLogin = $pessoaDao->buscarLogin($pessoaDto->getLogin());
+    //verifica se retorno login foi falso e redireciona para form com erro
+    if (isset($buscaLogin['login']) && !empty($buscaLogin['login'])) {
         header("location: /crud_php/view/FormPessoa.php?form={$paginaForm}&msgErrLogEx=1");
         exit();
     }
@@ -40,9 +40,15 @@ if ($sucesso) {
     //se o usuario estiver logado redireciona para pagina de cadastro se nao para home
     switch ($paginaForm) {
         case '1':
+            //buscando id pessoa para imagens do album, tem que ser feita uma nova busca
+            //pois na anterior pessoa ainda nao estava cadastrada
+            $idPessoaAlbum = $pessoaDao->buscarLogin($pessoaDto->getLogin());
+
             //inicia uma sessão
             session_start();
-            $_SESSION['login'] = $pessoaDto->getLogin($login);
+            $_SESSION['login']    = $idPessoaAlbum['login'];
+            //idPessoa para manutencao do album
+            $_SESSION['idPessoa'] = $idPessoaAlbum['id_pessoa'];
             //redireciona para pagina principal
             header("location: /crud_php/view/paginasRestritas/Home.php?msglog=1");
             exit();

@@ -6,6 +6,7 @@ class MultimidiaDTO
     private $descricao;//descrição do usuario sobre a foto "comentario"
     private $legenda;//nome dado a foto sera salva no banco de dados e mostradado quando vinher do banco de dados
     private $pathImage;//caminho da midia na pasta
+    private $idPessoa;
     //private $tamanho;//largura e altura do arquivo
     //private $tipo;//extenção da imagem
 
@@ -73,4 +74,19 @@ class MultimidiaDTO
         $this->pathImage = $pathImage;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getIdPessoa()
+    {
+        return $this->idPessoa;
+    }
+
+    /**
+     * @param mixed $idPessoa
+     */
+    public function setIdPessoa($idPessoa): void
+    {
+        $this->idPessoa = $idPessoa;
+    }
 }

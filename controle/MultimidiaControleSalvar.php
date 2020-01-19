@@ -1,10 +1,12 @@
 <?php
+//inicia uma sessão
+require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/view/configuracoes/VerificaSeEstaLogado.php';
+//configurando horario local sem horario de verao
+date_default_timezone_set('America/Sao_Paulo');
+
 //chamando os arquivos dto e dao
 require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/DTO/MultimidiaDTO.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/DAO/MultimidiaDAO.php';
-
-//inicia uma sessão
-session_start();
 
 //atribuindo o nome de usuario logado a uma variavel
 //para criação de pastas para salvar as imagens
@@ -13,7 +15,7 @@ $nome_login = $_SESSION['login'];
 //recebendo as informações do form
 $legenda            = $_POST['legenda'];
 $descricaoEvento    = $_POST['descricao_evento'];
-$arquivo            = $_FILES['fotoAlbum'];              //colocando o arquivo completo dentro da variavel
+$arquivo            = $_FILES['fotoAlbum'];         //colocando o arquivo completo dentro da variavel
 //$tmp_name         = $_FILES['file']['tmp_name'];  //local temporario do arquivo
 //$tamanho          = $_FILES['file']['size'];      //tamanho do arquivo
 //$tipo             = $_FILES['file']['type'];      //tipo do arquivo(image/jpeg)
@@ -24,7 +26,7 @@ $arquivo            = $_FILES['fotoAlbum'];              //colocando o arquivo c
 $error = array();
 
 //definindo limitaçoes para imagens upadas
-$mg         = 1;               //20MB diz o tamanho da imagem a ser salva
+$mg         = 10;               //20MB diz o tamanho da imagem a ser salva
 $largura    = 2280;		        //2280px
 $altura     = 1280;		        //1280px
 $tamanho    = 1000000 * $mg;	//1 = 1000000
@@ -56,19 +58,28 @@ $caminhoImagem = '/crud_php/imagensBanco/'.$nome_login.'/'.$nome_imagem;
 //CADASTRANDO AS INFORMAÇÕES
 $multimidiaDTO = new MultimidiaDTO();
 
+
 $multimidiaDTO->setNomeArquivo($nome_imagem);
 $multimidiaDTO->setDescricao($descricaoEvento);
 $multimidiaDTO->setLegenda($legenda);
 $multimidiaDTO->setPathImage($caminhoImagem);
+$multimidiaDTO->setIdPessoa($_SESSION['idPessoa']);
 
 $multimidiaDAO = new MultimidiaDAO();
 
+$sucesso = $multimidiaDAO->salvarImagem($multimidiaDTO);
+
+if ($sucesso) {
+    //redireciona para pagina album com msg de sucesso
+    header("location: /crud_php/view/paginasRestritas/album.php?msg=sucess");
+    exit();
+}else{
+    //redireciona para pagina album com msg de erro
+    header("location: /crud_php/view/paginasRestritas/album.php?msg=erro");
+    exit();
+}
 
 
-
-echo '<pre>';
-print_r($multimidiaDTO);
-echo '</pre>';die();
 //        $cst = $this->con->conectar()->prepare("INSERT INTO `aula_upload_arquivos` (`legenda`, `arquivo`) VALUES (:legenda, :arquivo);");
 //        $cst->bindParam(':legenda', $this->objfc->tratarCaracter($this->legenda, 1), PDO::PARAM_STR);
 //        $cst->bindParam(':arquivo', $nome_imagem, PDO::PARAM_STR);
