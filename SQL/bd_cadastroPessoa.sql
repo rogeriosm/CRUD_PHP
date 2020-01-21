@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `bd_cadastroPessoa`.`arquivo_multimidia` (
   `nome_arquivo` VARCHAR(45) NULL DEFAULT 'Não informado',
   `descricao` VARCHAR(255) NULL DEFAULT 'Não informado',
   `legenda` VARCHAR(45) NOT NULL,
-  `path_image` VARCHAR(45) NOT NULL,
+  `path_image` VARCHAR(500) NOT NULL,
   `pessoa_id_pessoa` INT NOT NULL,
   PRIMARY KEY (`id_arquivos_multimedia`),
   INDEX `fk_arquivos_multimidia_pessoa1_idx` (`pessoa_id_pessoa` ASC) VISIBLE,
@@ -352,6 +352,10 @@ begin
         UPDATE `bd_cadastropessoa`.`pessoa`
         SET `nome` = p_nome, `login` = p_login, `senha` = p_senha, `apelido` = p_apelido, `tipo_usuario_id_tipo_usuario` = p_tipoUsuario
         WHERE (`id_pessoa` = p_idpessoa);
+    else
+        UPDATE `bd_cadastropessoa`.`pessoa`
+        SET `nome` = p_nome, `login` = p_login, `apelido` = p_apelido, `tipo_usuario_id_tipo_usuario` = p_tipoUsuario
+        WHERE (`id_pessoa` = p_idpessoa);
     end if;
 
     -- se nao hover erro finaliza a procedure com o commit e retorna sucesso
@@ -374,6 +378,12 @@ delimiter ;
 
 INSERT INTO `bd_cadastropessoa`.`tipo_usuario` (`id_tipo_usuario`, `descricao`) VALUES ('1', 'usuario');
 INSERT INTO `bd_cadastropessoa`.`tipo_usuario` (`id_tipo_usuario`, `descricao`) VALUES ('2', 'administrador');
+
+INSERT INTO `bd_cadastropessoa`.`curso` (`id_curso`, `disciplina`) VALUES ('1', 'ciencia da conputação');
+INSERT INTO `bd_cadastropessoa`.`curso` (`id_curso`, `disciplina`) VALUES ('2', 'administração');
+INSERT INTO `bd_cadastropessoa`.`curso` (`id_curso`, `disciplina`) VALUES ('3', 'medicina');
+INSERT INTO `bd_cadastropessoa`.`curso` (`id_curso`, `disciplina`) VALUES ('4', 'arquitetura');
+INSERT INTO `bd_cadastropessoa`.`curso` (`id_curso`, `disciplina`) VALUES ('5', 'farmacia');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

@@ -30,5 +30,9 @@ if(file_exists($listaMultimidia['path_image']))
         echo "Erro ao apagar foto do servidor";
         exit();
     }
+}else{
+    //voltar para pagina de cadastro de imagem com msg de erro
+    header('location: /crud_php/view/paginasRestritas/Album.php?msg=arquivo inexistente');
+    exit();
 }
 
