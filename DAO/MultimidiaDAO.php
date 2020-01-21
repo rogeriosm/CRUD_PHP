@@ -18,7 +18,7 @@ class multimidiaDAO
     //inserindo uma uma imagem
     function salvarImagem(MultimidiaDTO $multimidiaDTO){
         try{
-            $sql = "insert into arquivos_multimidia (nome_arquivo, descricao, legenda, pessoa_id_pessoa, path_image) 
+            $sql = "insert into arquivo_multimidia (nome_arquivo, descricao, legenda, pessoa_id_pessoa, path_image) 
                     values (?, ?, ?, ?,?)";
 
             $stmt = $this->pdo->prepare($sql);
@@ -41,7 +41,7 @@ class multimidiaDAO
         try
         {
             $sql = "select id_arquivos_multimedia, nome_arquivo, descricao, legenda, pessoa_id_pessoa, path_image
-                    from arquivos_multimidia
+                    from arquivo_multimidia
                     where pessoa_id_pessoa = ?";
 
             $stmt = $this->pdo->prepare($sql);
@@ -62,7 +62,7 @@ class multimidiaDAO
         try
         {
             $sql = "select path_image
-                    from arquivos_multimidia
+                    from arquivo_multimidia
                     where id_arquivos_multimedia = ?";
 
             $stmt = $this->pdo->prepare($sql);
@@ -82,7 +82,7 @@ class multimidiaDAO
     {
         try
         {
-            $sql = "DELETE FROM arquivos_multimidia WHERE id_arquivos_multimedia = ?";
+            $sql = "DELETE FROM arquivo_multimidia WHERE id_arquivos_multimedia = ?";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(1, $idImagem, 1);
