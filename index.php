@@ -8,7 +8,7 @@
 <div class="container">
 <!-- recebe todas as mensagens e mostra a correta-->
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/crud_php/view/configuracoes/MensagensCadastro.php'; ?>
-
+inivio
     <a href="/crud_php/view/FormPessoa.php?form=1"><button class="btn">Cadastrar Usuário</button></a><br>
     <a href="/crud_php/view/Login.php"><button class="btn">Login</button></a><br>
     <a href="/crud_php/view/paginasRestritas/Home.php"><button class="btn">Home restrito</button></a><br>
